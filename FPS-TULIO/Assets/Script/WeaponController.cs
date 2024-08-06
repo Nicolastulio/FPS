@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -9,7 +10,10 @@ using UnityEngine.UIElements;
 
 public class WeaponController : MonoBehaviour
 {
-        
+    [Header("tiro da Arma")]
+    public Transform PosicaoBala;
+    public GameObject bullet;
+      
 
     [Header("configs da arma")]
     public int bullets = 6;
@@ -22,8 +26,9 @@ public class WeaponController : MonoBehaviour
     public float timeToReload = 5f;
     public float damage = 30;
 
-  
-   
+    [Header("tiro-canvas")]
+    public TMP_Text textomunicao;
+
     float initialTimeToShoot;
     float initialTimeToReload;
 
@@ -51,23 +56,11 @@ public class WeaponController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0) && canShoot && !reloading)
         {
 
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2));
-            
-            if (Physics.Raycast(ray,out hit,range)) 
-            {
-                if (hit.transform.tag == "Enemy")
-                {
-
-                    Destroy(hit.transform.gameObject);
-                
-                }
-            
-            
-            }
+            GameObject bulletInstance = Instantiate(bullet, PosicaoBala.position, PosicaoBala.rotation);
+          
 
             bullets--;
-
+            textomunicao.text = bullets.ToString();
             canShoot = false;
             bulletFired++;
 
@@ -123,7 +116,7 @@ public class WeaponController : MonoBehaviour
 
                 timeToReload = initialTimeToReload;
                 reloading = false;
-
+                textomunicao.text = bullets.ToString();
 
             }
 
